@@ -6,22 +6,15 @@
   <title>PDF to Image - PDF Tools Images</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
-    .preview-container canvas {
-      max-width: 100%;
-      margin: 10px 0;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-    }
+    .preview-container { display: flex; flex-direction: column; gap: 15px; margin-top: 15px; }
+    .page-container { position: relative; display: inline-block; }
+    .download-btn { position: absolute; top: 5px; right: 5px; background: #007bff; color: white; border: none; padding: 5px 8px; border-radius: 6px; cursor: pointer; }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Convert PDF to Image</h1>
-
-    <!-- Input PDF -->
+    <h1>🖼 PDF to Image</h1>
     <input type="file" id="pdfInput" accept="application/pdf">
-
-    <!-- Preview -->
     <div id="imagePreview" class="preview-container"></div>
   </div>
 
