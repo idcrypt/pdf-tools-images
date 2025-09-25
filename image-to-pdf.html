@@ -92,7 +92,7 @@
   </div>
 
   <!-- Hidden file input -->
-  <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none">
+  <input type="file" id="photoInput" accept="image/*" style="display:none">
 
   <!-- Cropper modal -->
   <div id="cropModal"></div>
@@ -100,5 +100,13 @@
   <script src="js/cropper.min.js"></script>
   <script src="js/jspdf.umd.min.js"></script>
   <script src="js/image-to-pdf.js"></script>
+  <script>
+    // Device detection untuk capture camera di mobile
+    const photoInput = document.getElementById("photoInput");
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile) {
+      photoInput.setAttribute("capture", "environment");
+    }
+  </script>
 </body>
 </html>
