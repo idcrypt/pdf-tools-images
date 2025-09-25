@@ -6,29 +6,37 @@
   <title>Image to PDF - PDF Tools Images</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/cropper.min.css">
+  <style>
+    .photo-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+    .photo-item { position: relative; width: 120px; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; }
+    .photo-item img { width: 100%; }
+    .remove-btn { position: absolute; top: 2px; right: 2px; background: red; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; }
+    button.icon-btn { display: inline-flex; align-items: center; gap: 5px; padding: 8px 12px; border-radius: 8px; border: none; cursor: pointer; }
+    button.icon-btn img { width: 20px; height: 20px; }
+  </style>
 </head>
 <body>
   <div class="container">
-    <h1>Convert Image to PDF</h1>
+    <h1>📷 Image to PDF</h1>
 
-    <!-- Input kamera -->
-    <input type="file" id="cameraInput" accept="image/*" capture="environment">
+    <button class="icon-btn" id="addPhotoBtn">
+      <img src="assets/icons/camera.svg" alt="Camera"> Add Photo
+    </button>
 
-    <!-- Preview foto -->
-    <div class="preview-container">
-      <img id="preview" alt="Your photo will appear here">
-    </div>
+    <div class="photo-list" id="photoList"></div>
 
-    <!-- Pilih ukuran -->
-    <label for="pdfSize">Select PDF Size:</label>
+    <label for="pdfSize">PDF Size:</label>
     <select id="pdfSize">
-      <option value="A4">A4 (210 x 297 mm)</option>
-      <option value="F4">F4 (210 x 330 mm)</option>
+      <option value="A4">A4 (210x297 mm)</option>
+      <option value="F4">F4 (210x330 mm)</option>
     </select>
 
-    <!-- Tombol generate -->
-    <button id="downloadBtn">Download PDF</button>
+    <button class="icon-btn" id="downloadPDFBtn">
+      <img src="assets/icons/download.svg" alt="Download"> Download PDF
+    </button>
   </div>
+
+  <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none">
 
   <script src="js/cropper.min.js"></script>
   <script src="js/jspdf.umd.min.js"></script>
