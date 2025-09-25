@@ -1,45 +1,67 @@
 let cropper;
+const photos = [];
 
-// handle input kamera
-document.getElementById("cameraInput").addEventListener("change", (e) => {
+const photoInput = document.getElementById("photoInput");
+const photoList = document.getElementById("photoList");
+
+document.getElementById("addPhotoBtn").addEventListener("click", () => {
+  photoInput.click();
+});
+
+photoInput.addEventListener("change", (e) => {
   const file = e.target.files[0];
   if (!file) return;
 
-  const url = URL.createObjectURL(file);
-  const img = document.getElementById("preview");
-  img.src = url;
+  const imgURL = URL.createObjectURL(file);
 
-  // destroy cropper lama kalau ada
-  if (cropper) cropper.destroy();
+  const div = document.createElement("div");
+  div.className = "photo-item";
 
-  // init cropper baru
-  img.onload = () => {
-    cropper = new Cropper(img, {
-      aspectRatio: NaN,
-      viewMode: 1,
-    });
+  const img = document.createElement("img");
+  img.src = imgURL;
+
+  const removeBtn = document.createElement("button");
+  removeBtn.className = "remove-btn";
+  removeBtn.innerText = "×";
+  removeBtn.onclick = () => {
+    photoList.removeChild(div);
+    const idx = photos.indexOf(imgURL);
+    if (idx > -1) photos.splice(idx, 1);
   };
+
+  div.appendChild(img);
+  div.appendChild(removeBtn);
+  photoList.appendChild(div);
+
+  photos.push(imgURL);
 });
 
-// fungsi simpan PDF
-function savePDF(size = "A4") {
-  if (!cropper) {
-    alert("Please take or upload a photo first!");
-    return;
-  }
+// Generate PDF
+document.getElementById("downloadPDFBtn").addEventListener("click", () => {
+  const size = document.getElementById("pdfSize").value;
+  if (photos.length === 0) return alert("Add at least one photo");
 
-  let format = size === "F4" ? [210, 330] : "a4";
+  const format = size === "F4" ? [210, 330] : "a4";
   const pdf = new jspdf.jsPDF({ unit: "mm", format });
 
-  const imgData = cropper.getCroppedCanvas().toDataURL("image/jpeg");
+  photos.forEach((photo, index) => {
+    const img = new Image();
+    img.src = photo;
+    img.onload = () => {
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
 
-  // ukurannya penuh sesuai A4/F4
-  pdf.addImage(imgData, "JPEG", 0, 0, 210, size === "F4" ? 330 : 297);
-  pdf.save("output.pdf"); // auto download
-}
+      // Scale image to fit page (maintain aspect ratio)
+      let ratio = Math.min(pageWidth / img.width, pageHeight / img.height);
+      const width = img.width * ratio;
+      const height = img.height * ratio;
+      const x = (pageWidth - width) / 2;
+      const y = (pageHeight - height) / 2;
 
-// tombol download
-document.getElementById("downloadBtn").addEventListener("click", () => {
-  const size = document.getElementById("pdfSize").value;
-  savePDF(size);
+      pdf.addImage(img, "JPEG", x, y, width, height);
+
+      if (index < photos.length - 1) pdf.addPage();
+      if (index === photos.length - 1) pdf.save("output.pdf");
+    };
+  });
 });
