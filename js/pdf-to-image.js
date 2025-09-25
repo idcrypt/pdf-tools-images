@@ -1,45 +1,61 @@
-const pdfInput = document.getElementById("pdfInput");
-const preview = document.getElementById("imagePreview");
+// Pastikan pdf.js sudah di-include di HTML atau via CDN
+// <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.12.313/pdf.min.js"></script>
 
-pdfInput.addEventListener("change", async (e) => {
+const fileInput = document.getElementById('pdf-upload');
+const previewContainer = document.querySelector('.preview-container');
+
+fileInput.addEventListener('change', (e) => {
   const file = e.target.files[0];
   if (!file) return;
 
   const fileReader = new FileReader();
-  fileReader.onload = async function () {
+  fileReader.onload = function() {
     const typedarray = new Uint8Array(this.result);
-    const pdf = await pdfjsLib.getDocument(typedarray).promise;
 
-    preview.innerHTML = "";
+    pdfjsLib.getDocument(typedarray).promise.then(pdf => {
+      // Clear previous previews
+      previewContainer.innerHTML = '';
 
-    for (let i = 1; i <= pdf.numPages; i++) {
-      const page = await pdf.getPage(i);
-      const viewport = page.getViewport({ scale: 1.5 });
+      for (let i = 1; i <= pdf.numPages; i++) {
+        pdf.getPage(i).then(page => {
+          const scale = 1.5; // zoom scale
+          const viewport = page.getViewport({ scale });
 
-      const canvas = document.createElement("canvas");
-      canvas.width = viewport.width;
-      canvas.height = viewport.height;
-      const context = canvas.getContext("2d");
+          const canvas = document.createElement('canvas');
+          const context = canvas.getContext('2d');
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
 
-      await page.render({ canvasContext: context, viewport }).promise;
+          // Render PDF page ke canvas
+          page.render({ canvasContext: context, viewport: viewport }).promise.then(() => {
+            // Container untuk canvas + tombol download
+            const pageContainer = document.createElement('div');
+            pageContainer.className = 'page-container';
+            pageContainer.style.position = 'relative';
 
-      const container = document.createElement("div");
-      container.className = "page-container";
+            // Tombol download
+            const downloadBtn = document.createElement('button');
+            downloadBtn.className = 'download-btn';
+            downloadBtn.innerHTML = '⬇ Download';
+            downloadBtn.addEventListener('click', () => {
+              const link = document.createElement('a');
+              link.href = canvas.toDataURL('image/png');
+              link.download = `page-${i}.png`;
+              link.click();
+            });
 
-      const downloadBtn = document.createElement("button");
-      downloadBtn.className = "download-btn";
-      downloadBtn.innerText = "Download PNG";
-      downloadBtn.onclick = () => {
-        const link = document.createElement("a");
-        link.href = canvas.toDataURL("image/png");
-        link.download = `page-${i}.png`;
-        link.click();
-      };
+            pageContainer.appendChild(canvas);
+            pageContainer.appendChild(downloadBtn);
 
-      container.appendChild(canvas);
-      container.appendChild(downloadBtn);
-      preview.appendChild(container);
-    }
+            // Append ke container utama
+            previewContainer.appendChild(pageContainer);
+          });
+        });
+      }
+    }).catch(err => {
+      console.error('PDF render error:', err);
+      alert('Failed to load PDF.');
+    });
   };
   fileReader.readAsArrayBuffer(file);
 });
