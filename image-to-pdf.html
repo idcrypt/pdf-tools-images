@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image to PDF - PDF Tools Images</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/cropper.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Convert Image to PDF</h1>
+
+    <!-- Input kamera -->
+    <input type="file" id="cameraInput" accept="image/*" capture="environment">
+
+    <!-- Preview foto -->
+    <div class="preview-container">
+      <img id="preview" alt="Your photo will appear here">
+    </div>
+
+    <!-- Pilih ukuran -->
+    <label for="pdfSize">Select PDF Size:</label>
+    <select id="pdfSize">
+      <option value="A4">A4 (210 x 297 mm)</option>
+      <option value="F4">F4 (210 x 330 mm)</option>
+    </select>
+
+    <!-- Tombol generate -->
+    <button id="downloadBtn">Download PDF</button>
+  </div>
+
+  <script src="js/cropper.min.js"></script>
+  <script src="js/jspdf.umd.min.js"></script>
+  <script src="js/image-to-pdf.js"></script>
+</body>
+</html>
