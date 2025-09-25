@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF to Image - PDF Tools Images</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .preview-container canvas {
+      max-width: 100%;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Convert PDF to Image</h1>
+
+    <!-- Input PDF -->
+    <input type="file" id="pdfInput" accept="application/pdf">
+
+    <!-- Preview -->
+    <div id="imagePreview" class="preview-container"></div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="js/pdf-to-image.js"></script>
+</body>
+</html>
