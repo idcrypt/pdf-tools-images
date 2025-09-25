@@ -13,7 +13,9 @@
       margin-top: 30px;
     }
     .menu a {
-      display: block;
+      display: flex;
+      align-items: center;
+      gap: 10px;
       padding: 15px;
       font-size: 1.2em;
       text-decoration: none;
@@ -25,6 +27,10 @@
     .menu a:hover {
       background: #0056b3;
     }
+    .menu img {
+      width: 25px;
+      height: 25px;
+    }
   </style>
 </head>
 <body>
@@ -32,8 +38,12 @@
     <h1>📄 PDF Tools Images</h1>
     <p>Select a tool below:</p>
     <div class="menu">
-      <a href="image-to-pdf.html">📷 Image to PDF (Camera + Crop)</a>
-      <a href="pdf-to-image.html">🖼 PDF to Image</a>
+      <a href="image-to-pdf.html">
+        <img src="assets/icons/camera.svg" alt="Camera Icon"> Image to PDF
+      </a>
+      <a href="pdf-to-image.html">
+        <img src="assets/icons/image.svg" alt="Image Icon"> PDF to Image
+      </a>
     </div>
   </div>
 </body>
